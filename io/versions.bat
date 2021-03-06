@@ -1,33 +1,45 @@
 @ECHO off
 
-GOTO %1
+REM GOTO %1
 
-:readMysqlVersion
-IF EXIST %dirDevConfigMysql% (
-    REM Assign the first line of the file to the variable.
-    SET /P mysqlVersion=<%dirDevConfigMysql%
-) ELSE (
-    CALL :writeMysqlVersion
+REM SETLOCAL EnableDelayedExpansion
+CALL util\validation.bat validate2ParameterExistence %1 %2
+REM ENDLOCAL
+
+SET check=""
+IF "%err%"=="%check%" (
+    GOTO %1
 )
+
+REM add quotes to transfer the string as a single variable.
+CALL modules\app\prints.bat printErr "%err%"
 GOTO :EOF
 
-:readPhpVersion
-IF EXIST %dirDevConfigPhp% (
-    REM Assign the first line of the file to the variable.
-    SET /P phpVersion=<%dirDevConfigPhp%
-) ELSE (
-    CALL :writePhpVersion
+:readVersion <dummy> <environment-app>
+REM Read the value of the first line of the file at %dirVersions%\%2.
+SET "versionTmp="
+IF "%2" NEQ "" (
+    IF EXIST %dirVersions%\%2% (
+        FOR /F "tokens=*" %%a in (%dirVersions%\%2%) do (
+            REM The value of the versionTmp variable will not be accessable before the end of the if clause.
+            SET versionTmp=%%a
+        )
+    ) ELSE (
+        SET "versionTmp=N/A"
+    )
 )
+REM CALL io\versions.bat writeVersion %2 %versionTmp%
 GOTO :EOF
 
-:writeMysqlVersion
-REM CD /D %dirDevConfig%
-REM ECHO %mysqlVersion% > v_mysql.txt
-ECHO %mysqlVersion%>%dirDevConfigMysql%
+:writeVersion <dummy> <environment-app> <version>
+REM Write the value of the 3rd parameter into the file at %dirVersions%\%2.
+ECHO %3>%dirVersions%\%2
 GOTO :EOF
 
-:writePhpVersion
-REM CD /D %dirDevConfig%
-REM ECHO %phpVersion% > v_php.txt
-ECHO %phpVersion%>%dirDevConfigPhp%
+:test
+REM for /f "tokens=* usebackq" %%f in (`dir /b /o:d`) do (set "file=%%f" & goto :next)
+for /f "tokens=* usebackq" %%f in (%dirVersions%\%2%) do (set "vTmp=%%f" & goto :EOF)
+REM FOR /F "tokens=*" %%a in (%dirVersions%\%2%) do (
+    REM SET vTmp=%%a
+REM )
 GOTO :EOF

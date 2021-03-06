@@ -1,0 +1,30 @@
+
+************************************************************************************
+menu
+************************************************************************************
+- Development environment
+	- Configuration
+		- Apache
+		- PHP
+		- MySQL
+	- Start/stop
+	- Open configuration files
+- Open CMDs on specific folder
+- Start Programms
+- New instance
+- Show status
+- Clean CMD
+- Go back
+- Exit CMD
+
+
+
+
+
+
+
+
+
+
+
+

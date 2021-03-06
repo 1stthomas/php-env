@@ -1,0 +1,8 @@
+@ECHO off
+
+ECHO  1) Environment configurations
+ECHO  2) Start environments
+ECHO  3) Stop environments
+ECHO  4) Open environment config files
+ECHO  5) Open cmds on specific folder
+ECHO  6) Start Programms
